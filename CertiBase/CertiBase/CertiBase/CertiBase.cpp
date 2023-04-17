@@ -1,17 +1,25 @@
 ﻿#include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 typedef long long ll;
-const int max_longlong = 9223372036854775807;
+const ll max_longlong = 9223372036854775807;
 
+struct info {
+    int a;
+    int b;
+    int c;
+};
 int N;
 int M;
+
+
 ll Answer;
 int Parent[1001];
 ll PSum[1001];
 
-vector<int> Input;
+vector<info> Input;
 
 void init()
 {
@@ -32,32 +40,20 @@ int findP(int x)
     return Parent[x] = p;
 }
 
-void UnionP(int x, int y, int cost)
+ll UnionP(int x, int y, ll cost)
 {
     int xx = findP(x);
     int yy = findP(y);
 
     if (xx == yy)
     {
-        if (PSum[x] > PSum[y])
-        {
-            PSum[x] = cost;
-            Parent[x] = yy;
-        }
-        else {
-            PSum[y] = cost;
-            Parent[y] = xx;
-        }
-        return;
+        return 0;
     }
 
-    if (PSum[y] >= cost)
-    {
-        PSum[y] = cost;
-        Parent[yy] = xx;
-    }
+    PSum[y] = cost;
+    Parent[yy] = xx;
 
-    return;
+    return cost;
 }
 
 int main()
@@ -71,14 +67,19 @@ int main()
     {
         scanf("%d %d %d", &a, &b, &c);
 
-        if (a == b)
-            continue;
-        UnionP(a, b, c);
+        Input.push_back({ a, b, c });
     }
 
-    for (int i = 2; i <= N; i++)
+    sort(Input.begin(), Input.end(), [](info a, info b) {
+        return a.c < b.c;
+        });
+
+    for (int m = 0; m < M; m++)
     {
-        Answer += PSum[i];
+        if (Input[m].a != Input[m].b)
+        {
+            Answer += UnionP(Input[m].a, Input[m].b, Input[m].c);
+        }
     }
 
     printf("%lld", Answer);
