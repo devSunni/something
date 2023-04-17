@@ -14,11 +14,8 @@ struct info {
 int N;
 int M;
 
-
 ll Answer;
 int Parent[1001];
-ll PSum[1001];
-
 vector<info> Input;
 
 void init()
@@ -26,7 +23,6 @@ void init()
     for (int i = 0; i < 1000; i++)
     {
         Parent[i] = i;
-        PSum[i] = max_longlong;
     }
     Answer = 0;
     Input.clear();
@@ -50,7 +46,6 @@ ll UnionP(int x, int y, ll cost)
         return 0;
     }
 
-    PSum[y] = cost;
     Parent[yy] = xx;
 
     return cost;
@@ -70,8 +65,8 @@ int main()
         Input.push_back({ a, b, c });
     }
 
-    sort(Input.begin(), Input.end(), [](info a, info b) {
-        return a.c < b.c;
+    sort(Input.begin(), Input.end(), [](info v1, info v2) {
+        return v1.c < v2.c;
         });
 
     for (int m = 0; m < M; m++)
